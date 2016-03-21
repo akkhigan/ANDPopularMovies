@@ -29,7 +29,6 @@ public class MovieDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_movie_detail, container, false);
-
         Intent intent = getActivity().getIntent();
         if (intent != null && intent.hasExtra("movie")) {
             movie = (Movie) intent.getParcelableExtra("movie");

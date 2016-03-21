@@ -160,7 +160,7 @@ public class MoviesFragment extends Fragment {
 
     private class TheMoviesDBTask extends AsyncTask<String, Void, List<Movie>> {
         private final String LOG_TAG = TheMoviesDBTask.class.getSimpleName();
-        private final String API_KEY = "28aa8ca5f8398dbe93c3755f76cbc4ec";
+        private final String API_KEY = "Apikey";
         private final String MOVIE_POSTER_BASE = "http://image.tmdb.org/t/p/";
         private final String MOVIE_POSTER_SIZE = "w185";
 

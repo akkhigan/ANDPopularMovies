@@ -15,15 +15,14 @@ public class MovieDetailActivity extends AppCompatActivity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private FragmentManager fragmentManager = getSupportFragmentManager();
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         if (savedInstanceState == null) {
             fragmentManager.beginTransaction()
                     .add(R.id.container, new MovieDetailFragment())
                     .commit();
         }
-        getSupportActionBar().setElevation(0f);
     }
 
     @Override
@@ -39,7 +38,6 @@ public class MovieDetailActivity extends AppCompatActivity {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
