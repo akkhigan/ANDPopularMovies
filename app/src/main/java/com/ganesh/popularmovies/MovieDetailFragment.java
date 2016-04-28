@@ -17,8 +17,10 @@ import com.squareup.picasso.Picasso;
  * A simple {@link Fragment} subclass.
  */
 public class MovieDetailFragment extends Fragment {
-
+    public static final String TAG = MovieDetailFragment.class.getSimpleName();
     private Movie movie;
+    private boolean mTwoPane;
+
     public MovieDetailFragment() {
         // Required empty public constructor
         setHasOptionsMenu(true);
@@ -32,6 +34,11 @@ public class MovieDetailFragment extends Fragment {
         Intent intent = getActivity().getIntent();
         if (intent != null && intent.hasExtra("movie")) {
             movie = (Movie) intent.getParcelableExtra("movie");
+            initViews(view);
+        }
+
+        if(getArguments() !=null){
+            movie = (Movie) getArguments().getParcelable("movie");
             initViews(view);
         }
         return view;
@@ -48,5 +55,8 @@ public class MovieDetailFragment extends Fragment {
         releaseDate.setText(movie.getReleaseDate());
         ratings.setText(movie.getVoteAverage() + "/10");
         overview.setText(movie.getOverview());
+    }
+    public void setTwoPane(boolean mTwoPane) {
+        this.mTwoPane = mTwoPane;
     }
 }

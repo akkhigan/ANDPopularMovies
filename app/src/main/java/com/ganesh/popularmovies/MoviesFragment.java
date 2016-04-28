@@ -39,20 +39,18 @@ import java.util.Locale;
  * create an instance of this fragment.
  */
 public class MoviesFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private final String LOG_TAG = MoviesFragment.class.getSimpleName();
+    public static final String TAG = MoviesFragment.class.getSimpleName();
     private final String STORED_MOVIES = "stored_movies";
     private SharedPreferences preferences;
     private PosterAdapter mPosterAdapter;
     private String sortOrder;
     private ArrayList<Movie> movies = new ArrayList<Movie>();
+    private boolean mTwoPane;
 
     public MoviesFragment() {
         // Required empty public constructor
@@ -66,7 +64,6 @@ public class MoviesFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment MoviesFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static MoviesFragment newInstance(String param1, String param2) {
         MoviesFragment fragment = new MoviesFragment();
         Bundle args = new Bundle();
@@ -114,9 +111,7 @@ public class MoviesFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Movie movie = movies.get(position);
-                Intent intent = new Intent(getActivity(), MovieDetailActivity.class)
-                        .putExtra("movie", movie);
-                startActivity(intent);
+                ((Callback) getActivity()).onItemSelected(null,movie);
             }
 
         });
@@ -129,9 +124,9 @@ public class MoviesFragment extends Fragment {
         // checking that sort order has changed recently
         String prefSortOrder = preferences.getString(getString(R.string.sort_order_key),
                 getString(R.string.sort_default_value));
-        if(movies.size() > 0 && prefSortOrder.equals(sortOrder)) {
+        if (movies.size() > 0 && prefSortOrder.equals(sortOrder)) {
             updatePosterAdapter();
-        }else{
+        } else {
             sortOrder = prefSortOrder;
             getMovies();
         }
@@ -144,7 +139,9 @@ public class MoviesFragment extends Fragment {
         storedMovies.addAll(movies);
         outState.putParcelableArrayList(STORED_MOVIES, storedMovies);
     }
-
+    public void setTwoPane(boolean mTwoPane) {
+        this.mTwoPane = mTwoPane;
+    }
     private void getMovies() {
         TheMoviesDBTask fetchMoviesTask = new TheMoviesDBTask();
         fetchMoviesTask.execute(sortOrder);
@@ -160,7 +157,7 @@ public class MoviesFragment extends Fragment {
 
     private class TheMoviesDBTask extends AsyncTask<String, Void, List<Movie>> {
         private final String LOG_TAG = TheMoviesDBTask.class.getSimpleName();
-        private final String API_KEY = "Apikey";
+        private final String API_KEY = "28aa8ca5f8398dbe93c3755f76cbc4ec";
         private final String MOVIE_POSTER_BASE = "http://image.tmdb.org/t/p/";
         private final String MOVIE_POSTER_SIZE = "w185";
 
@@ -281,14 +278,17 @@ public class MoviesFragment extends Fragment {
         @Override
         protected void onPostExecute(List<Movie> results) {
             super.onPostExecute(movies);
-            if(results!=null ){
+            if (results != null) {
                 movies.clear();
                 movies.addAll(results);
                 updatePosterAdapter();
-            }else{
+            } else {
                 Log.e(LOG_TAG, "No data");
             }
 
         }
+    }
+    public interface Callback {
+        public void onItemSelected(String data[],Movie movie);
     }
 }

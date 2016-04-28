@@ -12,7 +12,7 @@ import android.view.MenuItem;
  * Created by Ganesh on 3/18/2016.
  */
 public class MovieDetailActivity extends AppCompatActivity {
-    private final String LOG_TAG = MainActivity.class.getSimpleName();
+    public static final String LOG_TAG = MainActivity.class.getSimpleName();
     private FragmentManager fragmentManager = getSupportFragmentManager();
     @Override
     public void onCreate(Bundle savedInstanceState) {
