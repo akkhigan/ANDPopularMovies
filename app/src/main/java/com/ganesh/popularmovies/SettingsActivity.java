@@ -19,7 +19,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.settings_prefs);
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.sort_order_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_sort_order_key)));
     }
 
     @Override

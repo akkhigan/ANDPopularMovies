@@ -9,23 +9,27 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.ganesh.popularmovies.synch.PopularMoviesSyncAdapter;
+import com.ganesh.popularmovies.utils.AppUtils;
+
 public class MainActivity extends AppCompatActivity implements MoviesFragment.Callback {
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private FragmentManager fragmentManager = getSupportFragmentManager();
     MoviesFragment mFragment;
     private boolean mTwoPane;
+    private String mSortOrder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        mSortOrder = AppUtils.getPreferredSortOrder(this);
+        
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
-
+        mFragment = MoviesFragment.newInstance("","");
         if (findViewById(R.id.container_movies) != null) {
             mTwoPane = true;
-            mFragment = MoviesFragment.newInstance("","");
             MovieDetailFragment fragment = new MovieDetailFragment();
             fragment.setTwoPane(mTwoPane);
             if (savedInstanceState == null) {
@@ -43,9 +47,34 @@ public class MainActivity extends AppCompatActivity implements MoviesFragment.Ca
         } else {
             mTwoPane = false;
             getSupportActionBar().setElevation(0f);
+            if (savedInstanceState == null) {
+                fragmentManager.beginTransaction()
+                        .add(R.id.container, mFragment,MoviesFragment.TAG)
+                        .commit();
+            }else{
+                mFragment = (MoviesFragment) fragmentManager.getFragment(
+                        savedInstanceState, MoviesFragment.TAG);
+            }
         }
         if (mFragment != null) {
             mFragment.setTwoPane(mTwoPane);
+        }
+        PopularMoviesSyncAdapter.initializeSyncAdapter(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String sortOrder = AppUtils.getPreferredSortOrder(this);
+        if(sortOrder != null && !sortOrder.equals(mSortOrder)) {
+            if ( null != mFragment ) {
+                mFragment.onSortOrderChanged();
+            } else {
+                mFragment =  MoviesFragment.newInstance("", "");
+                mFragment.setTwoPane(mTwoPane);
+                mFragment.onSortOrderChanged();
+            }
+            mSortOrder = sortOrder;
         }
     }
     @Override
@@ -61,25 +90,17 @@ public class MainActivity extends AppCompatActivity implements MoviesFragment.Ca
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-        fragmentManager.putFragment(savedInstanceState, MoviesFragment.TAG, mFragment);
-    }
 
     @Override
-    public void onItemSelected(String[] data,Movie movie) {
+    public void onItemSelected(String[] data) {
         if (mTwoPane) {
-
             MovieDetailFragment fragment = new MovieDetailFragment();
             fragment.setTwoPane(mTwoPane);
             Bundle args = new Bundle();
             args.putStringArray(Intent.EXTRA_TEXT, data);
-            args.putParcelable("movie", movie);
             fragment.setArguments(args);
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -91,8 +112,7 @@ public class MainActivity extends AppCompatActivity implements MoviesFragment.Ca
 
         } else {
             Intent intent = new Intent(this, MovieDetailActivity.class);
-//            intent.putExtra(Intent.EXTRA_TEXT, data);
-            intent.putExtra("movie", movie);
+            intent.putExtra(Intent.EXTRA_TEXT, data);
             startActivity(intent);
             startActivity(intent);
         }

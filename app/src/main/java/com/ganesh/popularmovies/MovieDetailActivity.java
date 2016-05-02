@@ -14,15 +14,21 @@ import android.view.MenuItem;
 public class MovieDetailActivity extends AppCompatActivity {
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
     private FragmentManager fragmentManager = getSupportFragmentManager();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
-        if (savedInstanceState == null) {
-            fragmentManager.beginTransaction()
-                    .add(R.id.container, new MovieDetailFragment())
-                    .commit();
-        }
+
+        Bundle arguments = new Bundle();
+        String data[] = getIntent().getStringArrayExtra(Intent.EXTRA_TEXT);
+        arguments.putStringArray(Intent.EXTRA_TEXT, data);
+
+        MovieDetailFragment fragment = new MovieDetailFragment();
+        fragment.setArguments(arguments);
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit();
     }
 
     @Override

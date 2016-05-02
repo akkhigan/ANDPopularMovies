@@ -1,0 +1,53 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <ImageView
+            android:id="@+id/background_imageView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:minHeight="100dp"
+            android:scaleType="fitXY"
+            app:layout_collapseMode="pin" />
+
+        <ImageView
+            android:id="@+id/movie_image"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:layout_gravity="left"
+            android:paddingTop="20dp"
+            app:layout_collapseMode="pin" />
+
+        <TextView
+            android:id="@+id/movie_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="200dp"
+            android:editable="false"
+            android:fontFamily="sans-serif-light"
+            android:paddingLeft="10dp"
+            android:textColor="#ffffff"
+            android:textIsSelectable="false"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            app:layout_collapseMode="pin" />
+
+        <include
+            layout="@layout/movie_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/background_imageView" />
+
+    </RelativeLayout>
+
+
+</ScrollView>
